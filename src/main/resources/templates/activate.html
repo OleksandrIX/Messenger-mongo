@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <title>Himera</title>
+</head>
+<body>
+<p th:text="${message}"></p>
+<form th:action="@{/activate}" method="post">
+    <div>
+        <label for="code" >Activation code:</label>
+        <input autofocus type="text" id="code" name="code" placeholder="Code">
+    </div>
+    <div>
+        <input type="submit" value="OK"/>
+    </div>
+</form>
+
+</body>
+</html>
