@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -69,7 +71,8 @@ public class UserService implements UserDetailsService {
                 true,
                 email
                 ,String.valueOf(code),
-                Collections.singleton(Role.USER)
+                Collections.singleton(Role.USER),
+                null
         );
 
         userRepository.save(user);
@@ -97,5 +100,21 @@ public class UserService implements UserDetailsService {
             return true;
         }
         return false;
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public User findById(String id) {
+        return userRepository.findById(id).get();
+    }
+
+    public void saveAll(User...users) {
+        userRepository.saveAll(Arrays.asList(users));
     }
 }

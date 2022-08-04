@@ -1,6 +1,7 @@
 package com.himera.Messengermongo.models;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,12 +25,16 @@ public class User implements UserDetails {
     @Field
     private String activationCode;
     @Field
-    private Set<Role> roles;
+    @DBRef
+    private List<Chat> chats;
+    @Field
+    private Set<Role> roles ;
 
     public User() {
+        this.chats = new ArrayList<>();
     }
 
-    public User(String id, String username, String password, boolean active, String email, String activationCode, Set<Role> roles) {
+    public User(String id, String username, String password, boolean active, String email, String activationCode, Set<Role> roles,List<Chat> chats) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -37,16 +42,20 @@ public class User implements UserDetails {
         this.email = email;
         this.activationCode = activationCode;
         this.roles = roles;
+        this.chats = chats;
     }
 
-    public User(String username, String password, boolean active, String email, String activationCode, Set<Role> roles) {
+    public User(String username, String password, boolean active, String email, String activationCode, Set<Role> roles, List<Chat> chats) {
         this.username = username;
         this.password = password;
         this.active = active;
         this.email = email;
         this.activationCode = activationCode;
         this.roles = roles;
+        this.chats = chats;
     }
+
+
 
 
     public String getId() {
@@ -93,12 +102,32 @@ public class User implements UserDetails {
         this.activationCode = activationCode;
     }
 
+    public List<Chat> getChats() {
+        return chats;
+    }
+
+    public void setChat(Chat chat) {
+        chats.add(chat);
+    }
+
     public Set<Role> getRoles() {
         return roles;
     }
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public boolean contains(User user){
+        List<Chat> chatList = this.getChats();
+        List<Chat> chatListUser = user.getChats();
+        if (chatListUser == null) return false;
+        boolean contain= false;
+        for (Chat chat: chatList) {
+            contain = chatListUser.contains(chat);
+        }
+
+        return contain;
     }
 
     @Override
